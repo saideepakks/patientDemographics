@@ -1,0 +1,60 @@
+{
+  "name": "Patients",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "PatientId": {
+      "type": "number",
+      "id": true,
+      "required": true
+    },
+    "Email": {
+      "type": "string",
+      "required": true
+    },
+    "Password": {
+      "type": "string"
+    },
+    "FirstName": {
+      "type": "string"
+    },
+    "LastName": {
+      "type": "string"
+    },
+    "CreateDate": {
+      "type": "date"
+    },
+    "ModifyBy": {
+      "type": "number"
+    },
+    "ModifyDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "getPatientDemographics": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "PatientDemographics",
+          "type": "array",
+          "root": true,
+          "description": "Get all the patient demographics"
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/patientDemographics",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Patient_Demographics",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "PatientId": {
+      "type": "number",
+      "id": true,
+      "required": true
+    },
+    "Dob": {
+      "type": "date"
+    },
+    "Age": {
+      "type": "number"
+    },
+    "Gender": {
+      "type": "string"
+    },
+    "MaritalStatus": {
+      "type": "string"
+    },
+    "BloodGroup": {
+      "type": "string"
+    },
+    "CreateDate": {
+      "type": "date"
+    },
+    "CreateBy": {
+      "type": "number"
+    },
+    "ModifyBy": {
+      "type": "number"
+    },
+    "ModifyDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
