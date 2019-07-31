@@ -2,15 +2,14 @@
 let app = require("../../server/server");
 module.exports = function (Patients) {
 
-
     Patients.getPatientDemographics = async () => {
         try {
             let Patient_Demographics = app.models.Patient_Demographics;
             let demographics = await Patient_Demographics.find();
             let details = await Patients.find();
-
-            let patientDetails = details.map(patient =>
-                ({
+            let patientDetails = details.map(patient => {
+                let demography = demographics.find(demographic => demographic.id == patient.id);
+                return {
                     id: patient.PatientId,
                     email: patient.Email,
                     name: {
@@ -21,40 +20,35 @@ module.exports = function (Patients) {
                         by: patient.ModifyBy,
                         date: patient.ModifyDate
                     },
-                    createDate: patient.CreateDate
-                })
-            );
+                    createDate: patient.CreateDate.toISOString().slice(0, 10),
+                    demography: demography ? {
+                        dob: (demography.Dob) ? demography.Dob.toISOString().slice(0, 10) : null,
+                        age: demography.Age,
+                        gender: demography.Gender,
+                        bloodgroup: demography.BloodGroup,
+                        maritalstatus: demography.MaritalStatus,
+                        created: {
+                            by: demography.CreateBy,
+                            date: demography.CreateDate.toISOString().slice(0, 10)
+                        },
+                        modify: {
+                            by: demography.ModifyBy,
+                            date: (demography.ModifyDate) ? demography.ModifyDate.toISOString().slice(0, 10) : null
+                        }
 
-            let patientDemographics = demographics.map(patient => ({
-                id: patient.PatientId,
-                dob: patient.Dob,
-                age: patient.Age,
-                gender: patient.Gender,
-                maritalstatus: patient.MaritalStatus,
-                bloodgroup: patient.BloodGroup,
-                create: {
-                    by: patient.CreateBy,
-                    date: patient.CreateDate
-                },
-                modify: {
-                    by: patient.ModifyBy,
-                    date: patient.ModifyDate
+                    } : {}
+
                 }
-            }))
-
-            let getDemographics = (patientDetails) => {
-                patientDetails.map(
-                    patient => {
-                        patient.demographics = patientDemographics.filter(demographic => demographic.id == patient.id)
-                    }
-                )
             }
-            getDemographics(patientDetails);
+            );
+            if (patientDetails.length == 0)
+                throw new Error('patients does not exists');
             return patientDetails;
         } catch (err) {
+            console.log("err==>", err);
             return {
                 error: true,
-                messege: err.messege
+                messege: err.message
             }
         }
     };
